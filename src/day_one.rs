@@ -16,6 +16,7 @@ pub fn part2(nums: PathBuf) -> Option<String> {
     let it = s.split('/');
 
     it.flat_map(|num| num.parse::<isize>())
+        .take(20)
         .reduce(|acc, x| acc ^ x)?
         .pow(3)
         .to_string()
