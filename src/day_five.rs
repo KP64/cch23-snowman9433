@@ -1,7 +1,11 @@
-use rocket::serde::json::Json;
+use rocket::{routes, serde::json::Json, Route};
+
+pub fn routes() -> Vec<Route> {
+    routes![solution]
+}
 
 #[rocket::post("/?<offset>&<limit>&<split>", data = "<arr>")]
-pub fn solution(
+fn solution(
     offset: Option<usize>,
     limit: Option<usize>,
     split: Option<usize>,

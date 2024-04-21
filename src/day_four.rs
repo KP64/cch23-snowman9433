@@ -1,8 +1,12 @@
-use rocket::serde::{json::Json, Deserialize};
+use rocket::{routes, serde::{json::Json, Deserialize}, Route};
 use serde_json::{json, Value};
 
+pub fn routes() -> Vec<Route> {
+    routes![part1, part2]
+}
+
 #[derive(Deserialize)]
-pub struct Reindeer<'a> {
+struct Reindeer<'a> {
     name: &'a str,
     strength: usize,
     speed: Option<f64>,
@@ -15,7 +19,7 @@ pub struct Reindeer<'a> {
 }
 
 #[rocket::post("/strength", data = "<reindeers>")]
-pub fn part1(reindeers: Json<Vec<Reindeer>>) -> String {
+fn part1(reindeers: Json<Vec<Reindeer>>) -> String {
     reindeers
         .iter()
         .map(|r| r.strength)
@@ -24,7 +28,7 @@ pub fn part1(reindeers: Json<Vec<Reindeer>>) -> String {
 }
 
 #[rocket::post("/contest", data = "<reindeers>")]
-pub fn part2(reindeers: Json<Vec<Reindeer>>) -> Option<Json<Value>> {
+fn part2(reindeers: Json<Vec<Reindeer>>) -> Option<Json<Value>> {
     let fastest = reindeers.iter().max_by(|x, y| {
         x.speed
             .partial_cmp(&y.speed)

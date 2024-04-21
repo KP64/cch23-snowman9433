@@ -1,11 +1,15 @@
 use base64::prelude::*;
-use rocket::http::CookieJar;
+use rocket::{http::CookieJar, routes, Route};
 use serde::{Deserialize, Serialize};
 use serde_json::{json, Value};
 use std::collections::HashMap;
 
+pub fn routes() -> Vec<Route> {
+    routes![part1, part2]
+}
+
 #[rocket::get("/decode")]
-pub fn part1(cookies: &CookieJar) -> Option<String> {
+fn part1(cookies: &CookieJar) -> Option<String> {
     let cookie = cookies.get("recipe")?;
     let val = cookie.value();
 
@@ -22,7 +26,7 @@ struct Resp {
 }
 
 #[rocket::get("/bake")]
-pub fn part2(cookies: &CookieJar) -> Option<Value> {
+fn part2(cookies: &CookieJar) -> Option<Value> {
     let cookie = cookies.get("recipe")?;
     let val = cookie.value();
 

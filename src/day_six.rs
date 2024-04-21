@@ -1,8 +1,12 @@
-use rocket::serde::json::Json;
+use rocket::{routes, serde::json::Json, Route};
 use serde_json::{json, Value};
 
+pub fn routes() -> Vec<Route> {
+    routes![solution]
+}
+
 #[rocket::post("/", data = "<txt>")]
-pub fn solution(mut txt: String) -> Json<Value> {
+fn solution(mut txt: String) -> Json<Value> {
     let elfs = txt.matches("elf").count();
 
     let mut elf_on_shelf = 0;
