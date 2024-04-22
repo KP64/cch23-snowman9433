@@ -1,25 +1,38 @@
-use crate::MyState;
+use std::ops::Deref;
+
 use chrono::{DateTime, Datelike, Utc};
 use rocket::{routes, serde::json::Json, Route, State};
 use serde_json::{json, Value};
+use shuttle_persist::PersistInstance;
 use ulid::Ulid;
 use uuid::Uuid;
+
+#[derive(Debug)]
+pub struct Persistence(pub PersistInstance);
+
+impl Deref for Persistence {
+    type Target = PersistInstance;
+
+    fn deref(&self) -> &Self::Target {
+        &self.0
+    }
+}
 
 pub fn routes() -> Vec<Route> {
     routes![get_task1, post_task1, task2, task3]
 }
 
 #[rocket::get("/load/<string>")]
-fn get_task1(string: String, state: &State<MyState>) -> Option<String> {
-    let old_time = state.persist.load::<DateTime<Utc>>(&string).ok()?;
+fn get_task1(string: String, persistance: &State<Persistence>) -> Option<String> {
+    let old_time = persistance.load::<DateTime<Utc>>(&string).ok()?;
 
     let diff = Utc::now() - old_time;
     Some(diff.num_seconds().to_string())
 }
 
 #[rocket::post("/save/<string>")]
-fn post_task1(string: String, state: &State<MyState>) -> Option<()> {
-    state.persist.save(&string, Utc::now()).ok()
+fn post_task1(string: String, persistance: &State<Persistence>) -> Option<()> {
+    persistance.save(&string, Utc::now()).ok()
 }
 
 #[rocket::post("/ulids", data = "<arr>")]
