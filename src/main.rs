@@ -5,6 +5,7 @@ mod day_eight;
 mod day_eleven;
 mod day_five;
 mod day_four;
+mod day_fourteen;
 mod day_minus_one;
 mod day_one;
 mod day_seven;
@@ -31,6 +32,7 @@ async fn main(
         .mount("/11", day_eleven::routes())
         .mount("/12", day_twelve::routes())
         .mount("/13", day_thirteen::routes())
+        .mount("/14", day_fourteen::routes())
         .manage(persistence)
         .manage(db);
 
