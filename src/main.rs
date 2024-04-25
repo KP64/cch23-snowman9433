@@ -3,6 +3,7 @@ use sqlx::PgPool;
 
 mod day_eight;
 mod day_eleven;
+mod day_fifteen;
 mod day_five;
 mod day_four;
 mod day_fourteen;
@@ -33,6 +34,7 @@ async fn main(
         .mount("/12", day_twelve::routes())
         .mount("/13", day_thirteen::routes())
         .mount("/14", day_fourteen::routes())
+        .mount("/15", day_fifteen::routes())
         .manage(persistence)
         .manage(db);
 
